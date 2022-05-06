@@ -104,7 +104,13 @@ namespace LandDistribution
 
         private void button2_Click(object sender, EventArgs e)
         {
-            BL.CalculateLands(Groups, Lands);
+            int variance = Convert.ToInt32(numericUpDown1.Value * 1000);
+
+            foreach (KeyValuePair<int, int> entry in Groups)
+            {
+                Groups[entry.Key] = entry.Value + variance;
+            }
+            List <Dictionary<int, List<int>>> result = BL.CalculateLands(Groups, Lands);
         }
     }
 }
