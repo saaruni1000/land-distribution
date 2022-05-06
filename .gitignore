@@ -32,3 +32,5 @@
 *.app
 
 /.vs/
+/LandDistribution/bin/
+/LandDistribution/obj/
