@@ -38,7 +38,7 @@ namespace LandDistribution
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(463, 403);
+            this.button1.Location = new System.Drawing.Point(565, 403);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(94, 29);
             this.button1.TabIndex = 0;
@@ -53,12 +53,12 @@ namespace LandDistribution
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 29;
-            this.dataGridView1.Size = new System.Drawing.Size(409, 387);
+            this.dataGridView1.Size = new System.Drawing.Size(510, 387);
             this.dataGridView1.TabIndex = 1;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(463, 448);
+            this.button2.Location = new System.Drawing.Point(565, 448);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(94, 29);
             this.button2.TabIndex = 2;
