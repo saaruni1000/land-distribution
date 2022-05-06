@@ -13,14 +13,14 @@ namespace LandDistribution
 {
     public partial class Form1 : Form
     {
-        BL BusinessLogic;
-        Dictionary<int, double> Groups;
-        Dictionary<int, double> Lands;
+        Dictionary<int, int> Groups;
+        Dictionary<int, int> Lands;
 
         public Form1()
         {
             InitializeComponent();
-            BusinessLogic = new BL();
+            Groups = new Dictionary<int, int>();
+            Lands = new Dictionary<int, int>();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -45,11 +45,29 @@ namespace LandDistribution
             int colCount = xlRange.Columns.Count;
 
             // dt.Column = colCount;  
-            dataGridView1.ColumnCount = colCount;
+            dataGridView1.ColumnCount = colCount; // Sould be 4
             dataGridView1.RowCount = rowCount;
 
             for (int i = 1; i <= rowCount; i++)
             {
+                // Add data to dictionaries
+                if (i > 1)
+                {
+                    if (xlRange.Cells[i, 1].Value != null && xlRange.Cells[i, 2].Value != null)
+                    {
+                        int groupId = int.Parse(xlRange.Cells[i, 1].Value?.ToString());
+                        double groupPercent = double.Parse(xlRange.Cells[i, 2].Value?.ToString());
+                        Groups.Add(groupId, Convert.ToInt32(groupPercent * 1000));
+                    }
+
+                    if (xlRange.Cells[i, 3].Value != null && xlRange.Cells[i, 4].Value != null)
+                    {
+                        int landId = int.Parse(xlRange.Cells[i, 3].Value?.ToString());
+                        double landPercent = double.Parse(xlRange.Cells[i, 4].Value?.ToString());
+                        Lands.Add(landId, Convert.ToInt32(landPercent * 1000));
+                    }
+                }
+
                 for (int j = 1; j <= colCount; j++)
                 {
                     //write the value to the Grid  
@@ -57,6 +75,7 @@ namespace LandDistribution
                     {
                         dataGridView1.Rows[i - 1].Cells[j - 1].Value = xlRange.Cells[i, j].Value2.ToString();
                     }
+                
                     // Console.Write(xlRange.Cells[i, j].Value2.ToString() + "\t");  
                     //add useful things here!     
                 }
@@ -85,7 +104,7 @@ namespace LandDistribution
 
         private void button2_Click(object sender, EventArgs e)
         {
-            BusinessLogic.CalculateLands();
+            BL.CalculateLands(Groups, Lands);
         }
     }
 }
