@@ -76,23 +76,21 @@ namespace LandDistribution
 
             return chosenLands;
         }
-        public static List<Dictionary<int, List<int>>> CalculateLands(Dictionary<int, int> groups, Dictionary<int, int> lands)
+        public static SortedDictionary<int, List<int>> CalculateLands(Dictionary<int, int> groups, Dictionary<int, int> lands, int variance)
         {
             List<int> participants = groups.Keys.ToList();
-            List<Dictionary<int, List<int>>> res = new List<Dictionary<int, List<int>>>();
-            Dictionary<int, List<int>> currentResult = new Dictionary<int, List<int>>();
-            Dictionary<int, int> currentLands = lands;
+            SortedDictionary<int, List<int>> res = new SortedDictionary<int, List<int>>();
+            Dictionary<int, int> currentLands = new Dictionary<int,int>(lands);
             participants.Shuffle();
             foreach (int participant in participants)
             {
-                List<int> currentChosen = knapsackItems(groups[participant], currentLands.Values.ToArray(), currentLands.Keys.ToArray());
-                currentResult[participant] = currentChosen;
+                List<int> currentChosen = knapsackItems(groups[participant]+variance, currentLands.Values.ToArray(), currentLands.Keys.ToArray());
+                res[participant] = currentChosen;
                 foreach (int chosenLand in currentChosen)
                 {
                     currentLands.Remove(chosenLand);
                 }
             }
-            res.Add(currentResult);
             return res;
         }
     }

@@ -57,14 +57,14 @@ namespace LandDistribution
                     {
                         int groupId = int.Parse(xlRange.Cells[i, 1].Value?.ToString());
                         double groupPercent = double.Parse(xlRange.Cells[i, 2].Value?.ToString());
-                        Groups.Add(groupId, Convert.ToInt32(groupPercent * 1000));
+                        Groups.Add(groupId, Convert.ToInt32(groupPercent * 100 * 1000));
                     }
 
                     if (xlRange.Cells[i, 3].Value != null && xlRange.Cells[i, 4].Value != null)
                     {
                         int landId = int.Parse(xlRange.Cells[i, 3].Value?.ToString());
                         double landPercent = double.Parse(xlRange.Cells[i, 4].Value?.ToString());
-                        Lands.Add(landId, Convert.ToInt32(landPercent * 1000));
+                        Lands.Add(landId, Convert.ToInt32(landPercent * 100 * 1000));
                     }
                 }
 
@@ -100,17 +100,27 @@ namespace LandDistribution
             //quit and release  
             xlApp.Quit();
             Marshal.ReleaseComObject(xlApp);
+
+            button2.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            textBox1.Text = "";
+
             int variance = Convert.ToInt32(numericUpDown1.Value * 1000);
 
-            foreach (KeyValuePair<int, int> entry in Groups)
+            // Key - GroupID
+            // Value - List of LandID
+            SortedDictionary<int, List<int>> result = BL.CalculateLands(Groups, Lands, variance);
+
+            foreach (KeyValuePair<int, List<int>> entry in result)
             {
-                Groups[entry.Key] = entry.Value + variance;
-            }
-            List <Dictionary<int, List<int>>> result = BL.CalculateLands(Groups, Lands);
+                textBox1.AppendText($"Group {entry.Key} (Original Percentage: {Groups[entry.Key]/1000.0}%):" + Environment.NewLine);
+                textBox1.AppendText($"Lands: {string.Join(", ", entry.Value)}" + Environment.NewLine);
+                textBox1.AppendText($"Total percentage got: {Math.Round(entry.Value.Select(e => Lands[e]/1000.0).Sum(), 2)}%" + Environment.NewLine);
+                textBox1.AppendText($"============================" + Environment.NewLine);
+            }           
         }
     }
 }
